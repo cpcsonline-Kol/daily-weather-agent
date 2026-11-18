@@ -9,7 +9,7 @@ import requests
 # 1. Configuration (Example: Brampton, ON coordinates)
 LATITUDE = 43.7315
 LONGITUDE = -79.7624
-CITY_NAME = "Brampton, ON"
+CITY_NAME = "Bramladesh, ON"
 
 # Weather code mapping (WMO standards used by Open-Meteo)
 WEATHER_CODES = {
