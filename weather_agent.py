@@ -45,7 +45,7 @@ def generate_recommendation(weather):
     if weather["precip_prob"] >= 40:
         tips.append("Bring an umbrella or rain jacket.")
     if weather["temp_min"] <= 2:
-        tips.append("Bundle up—temperatures are near or below freezing.")
+        tips.append("Its that time again! Bundle up—temperatures are near or below freezing.")
     elif weather["temp_max"] >= 25:
         tips.append("Stay hydrated and wear light clothing.")
     if not tips:
