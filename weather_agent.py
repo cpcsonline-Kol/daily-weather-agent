@@ -5,6 +5,7 @@ from datetime import datetime
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 import requests
+
 1. Configuration (Example: Brampton, ON coordinates)
 LATITUDE = 43.7315
 LONGITUDE = -79.7624
@@ -16,6 +17,7 @@ WEATHER_CODES = {
 63: "Moderate rain", 65: "Heavy rain", 71: "Slight snow", 73: "Moderate snow",
 75: "Heavy snow", 95: "Thunderstorm"
 }
+
 def fetch_weather():
 url = (
 f"https://api.open-meteo.com/v1/forecast?"
@@ -26,6 +28,7 @@ f"&timezone=auto&forecast_days=1"
 response = requests.get(url)
 response.raise_for_status()
 data = response.json()["daily"]
+
 code = data["weather_code"][0]
 return {
 "date": data["time"][0],
@@ -34,6 +37,7 @@ return {
 "temp_min": data["temperature_2m_min"][0],
 "precip_prob": data["precipitation_probability_max"][0],
 }
+
 def generate_recommendation(weather):
 """Simple rule-based agent logic for daily advice."""
 tips = []
@@ -46,6 +50,7 @@ tips.append("Stay hydrated and wear light clothing.")
 if not tips:
 tips.append("Comfortable weather ahead—no special gear needed.")
 return " ".join(tips)
+
 def build_html_interface(weather, advice):
 """Generates a simple, clean static web interface."""
 html = f"""<!DOCTYPE html>
@@ -78,25 +83,27 @@ h1 {{ margin-top: 0; font-size: 1.5rem; color: #1e293b; }}
 with open("index.html", "w", encoding="utf-8") as f:
 f.write(html)
 return html
+
 def send_email(html_content, weather):
 sender = os.environ["SENDER_EMAIL"]
 password = os.environ["EMAIL_PASSWORD"]
 recipient = os.environ["RECIPIENT_EMAIL"]
+
 msg = MIMEMultipart("alternative")
 msg["Subject"] = f"7 AM Weather Briefing ({CITY_NAME}): {weather['condition']}, High {weather['temp_max']}°C"
 msg["From"] = sender
 msg["To"] = recipient
+
 msg.attach(MIMEText(html_content, "html"))
+
 context = ssl.create_default_context()
 with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
 server.login(sender, password)
 server.sendmail(sender, recipient, msg.as_string())
+
 if __name__ == "__main__":
 weather_data = fetch_weather()
 agent_advice = generate_recommendation(weather_data)
 html_output = build_html_interface(weather_data, agent_advice)
 send_email(html_output, weather_data)
 print("Weather interface updated and email sent successfully.")
-
-
-
