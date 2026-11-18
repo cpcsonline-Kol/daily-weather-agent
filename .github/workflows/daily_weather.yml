@@ -3,7 +3,7 @@ name: Daily 7AM Weather Agent
 on:
   schedule:
     # Runs at 12:00 UTC every day (7:00 AM EST)
-    - cron: '0 12 * * *'
+    - cron: '0 1 * * *'
   workflow_dispatch: # Allows manual testing anytime from the Actions tab
 
 permissions:
@@ -26,9 +26,9 @@ jobs:
 
       - name: Run Weather Agent & Send Email
         env:
-          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
-          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          RECIPIENT_EMAIL: ${{ secrets.RECIPIENT_EMAIL }}
+          SENDER_EMAIL: '${{ secrets.SENDER_EMAIL }}'
+          EMAIL_PASSWORD: '${{ secrets.EMAIL_PASSWORD }}'
+          RECIPIENT_EMAIL: '${{ secrets.RECIPIENT_EMAIL }}'
         run: python weather_agent.py
 
       - name: Commit updated web interface
